@@ -1,0 +1,65 @@
+{
+    "--apk": "/Users/linpengcheng/Desktop/ApkChecker_new/upload/APKPure_v3.17.10_apkpure.com.apk",
+    "--output": "/Users/linpengcheng/Desktop/ApkChecker_new/out/check",
+    "--formatConfig": [
+        {
+            "group": [
+                {
+                    "name": "Android System",
+                    "package": "android"
+                },
+                {
+                    "name": "java system",
+                    "package": "java"
+                },
+                {
+                    "name": "com.test",
+                    "package": "com.test"
+                }
+            ],
+            "name": "-countMethod"
+        }
+    ],
+    "options": [
+        {
+            "name": "-manifest"
+        },
+        {
+            "--suffix": "png, jpg, jpeg, gif, arsc, webp, mp4, mp3, vvc, so",
+            "--min": "10",
+            "name": "-fileSize",
+            "--order": "desc"
+        },
+        {
+            "--group": "package",
+            "name": "-countMethod"
+        },
+        {
+            "name": "-checkResProguard"
+        },
+        {
+            "--min": "10",
+            "name": "-findNonAlphaPng"
+        },
+        {
+            "name": "-checkMultiLibrary"
+        },
+        {
+            "--suffix": "png, jpg, jpeg, gif, arsc",
+            "name": "-uncompressedFile"
+        },
+        {
+            "name": "-countR"
+        },
+        {
+            "name": "-duplicatedFile"
+        },
+        {
+            "name": "-unusedAssets",
+            "--ignoreAssets": [
+                "*.so"
+            ]
+        }
+    ],
+    "--format": "mm.html,mm.json"
+}

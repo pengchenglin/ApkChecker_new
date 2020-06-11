@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>APK Checker Report</title>
+    <!-- <meta charset="utf-8"><link rel="icon" href="https://jscdn.com.cn/highcharts/images/favicon.ico"> -->
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="https://code.highcharts.com.cn/highcharts/highcharts.js"></script>
+    <script src="https://code.highcharts.com.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+    <script src="http://code.highcharts.com.cn/highcharts/8.0.4/themes/sunset.js"></script>
+
+     <link href="http://libs.baidu.com/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style type="text/css" media="screen">
+    body        { font-family: Microsoft YaHei;padding: 20px; font-size: 100%; }
+    table       { font-size: 100%; }
+    .table tbody tr td{
+                vertical-align: middle;
+            }
+
+    .heading .description, .attribute {
+        clear: both;
+    }
+
+    #failCaseOl li {
+        color: red
+    }
+    #errorCaseOl li {
+        color: orange
+    }
+    .pic_box img{
+        width: auto;
+        height: 100%;
+        -moz-box-shadow: 0px 0px 20px 0px #000;
+        -webkit-box-shadow: 0px 0px 20px 0px #000;
+        box-shadow: 0px 0px 20px 0px #000;
+    }
+    #total_row  { font-weight: bold; }
+    body>div.content{width:1200px;margin-left:auto;margin-right:auto;text-align:center;}
+    </style>
+
+</head>
+<body>
+<div class="content">
+
+
+    <h1>{{ package }}包大小历史报表</h1>
+    <div id="container" style="min-width:400px;height:400px"></div>
+    <p>合计报告数： {{ urls|length }} </p>
+    <table id="result_table" class="table table-condensed table-bordered table-hover">
+        <colgroup>
+        <col align="left" style="width: 300px;">
+        <col align="right">
+        <col align="right">
+        <col align="right">
+        <col align="right">
+        <col align="right">
+        <col align="right" style="width: 200px;">
+        </colgroup>
+        <tbody>
+
+            <tr id="header_row" class="text-center success" style="font-weight: bold;font-size: 14px;">
+<!--            <td>应用名称</td>-->
+            <td>创建时间</td>
+            <td>APP版本</td>
+            <td>versioncode</td>
+            <td>包体大小/M</td>
+            <td>详情</td>
+            </tr>
+            <!--这里写for开头-->
+            <!--{% for url in urls -%}-->
+            <tr class="errorClass warning">
+<!--                <td class="text-center">{{ url['package'] }}</a></li></td>-->
+                <!--<td></td>-->
+                <td class="text-center">{{ url['create_time'] }}</td>
+                <td class="text-center">{{ url['versionName'] }}</td>
+                <td class="text-center">{{ url['versionCode'] }}</td>
+                <td class="text-center">{{ url['apksize'] }}</td>
+                <td><a href="{{ url['report_path'] }}"><span style="color: #0077FF;">查看详情</span></a></td>
+
+            </tr>
+            <!--{% endfor -%}-->
+            <!--这里写for结束-->
+
+        </tbody>
+    </table>
+</div>
+<script>
+     chart = Highcharts.chart('container', {
+	chart: {
+		zoomType: 'x'
+	},
+	title: {
+		text: 'APK大小趋势'
+	},
+	subtitle: {
+		text: document.ontouchstart === undefined ?
+		'鼠标拖动可以进行缩放' : '手势操作进行缩放'
+	},
+	xAxis: {
+		// type: 'datetime',
+		// 			dateTimeLabelFormats: {
+		// 				millisecond: '%H:%M:%S.%L',
+		// 				second: '%H:%M:%S',
+		// 				minute: '%H:%M',
+		// 				hour: '%H:%M',
+		// 				day: '%m-%d',
+		// 				week: '%m-%d',
+		// 				month: '%Y-%m',
+		// 				year: '%Y'
+		// 			}
+		labels: {
+			rotation: -45
+		},
+		categories: [
+			{{time_list}}
+			]
+	},
+	// tooltip: {
+	// 	dateTimeLabelFormats: {
+	// 		millisecond: '%H:%M:%S.%L',
+	// 		second: '%H:%M:%S',
+	// 		minute: '%H:%M',
+	// 		hour: '%H:%M',
+	// 		day: '%Y-%m-%d',
+	// 		week: '%m-%d',
+	// 		month: '%Y-%m',
+	// 		year: '%Y'
+	// 	}
+	// },
+	yAxis: {
+		title: {
+			text: '文件大小/M'
+		},
+		labels: {
+			format: '{value} M'
+		}
+	},
+	tooltip: {
+		headerFormat: 'time: {point.x}<br>',
+		pointFormat: 'file size：{point.y} M ',
+		shared: true
+	},
+	legend: {
+		enabled: false
+	},
+	plotOptions: {
+		area: {
+			fillColor: {
+				linearGradient: {
+					x1: 0,
+					y1: 0,
+					x2: 0,
+					y2: 1
+				},
+				stops: [
+					[0, new Highcharts.getOptions().colors[0]],
+					[1, new Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+				]
+			},
+			marker: {
+				radius: 2
+			},
+			lineWidth: 1,
+			states: {
+				hover: {
+					lineWidth: 1
+				}
+			},
+			threshold: null
+		}
+	},
+	series: [{
+		type: 'area',
+		name: 'file size',
+		data: [
+		    {{size_list}}
+			]
+	}]
+});
+        </script>
+</body>
+</html>

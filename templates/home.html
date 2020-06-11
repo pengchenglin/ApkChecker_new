@@ -1,0 +1,103 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>APK Checker</title>
+<!--    <link href="../static/css/dashboard.css" rel="stylesheet">-->
+<!--    <link href="../static/css/bootstrap.min.css" rel="stylesheet"-->
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">-->
+    <link rel="icon" href="{{ url_for('static',filename='favicon.ico')}}">
+    <link href="{{ url_for('static',filename ='css/dashboard.css')}}" rel="stylesheet">
+    <link href="{{ url_for('static',filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static',filename='js/dashboard.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
+
+<!--    <script src="../static/dashboard.js"></script>-->
+<!--    <script src="../static/js/bootstrap.min.js"></script>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>-->
+
+    <script src="https://code.highcharts.com.cn/highcharts/highcharts.js"></script>
+    <script src="https://code.highcharts.com.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+<!--    <script src="http://code.highcharts.com.cn/highcharts/8.0.4/themes/sunset.js"></script>-->
+    <script src="https://code.highcharts.com.cn/highcharts/themes/grid-light.js"></script>
+
+
+  </head>
+ <body>
+  <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">APK Checker</a>
+    <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#exampleModal">上传APK</button>
+  </nav>
+  <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">上传apk文件</h5>
+          </div>
+          <div class="modal-body">
+<!--            <input id="lefile" type="file" style="display:none">-->
+<!--            <div class="input-append">-->
+<!--              <button class="btn btn-file" onclick="$('input[id=lefile]').click();">选择文件</button>-->
+<!--              <input id="photoCover" class="input-large" type="text">-->
+<!--            </div>-->
+              <form id="upload-form" enctype="multipart/form-data">
+                    <input id='file' class="btn btn-primary" name="upload_file" type="file">
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+            <button id='upload' type="button" class="btn btn-primary" data-dismiss="modal">上传</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!-- endModal -->
+  <div class="jumbotron">
+  <h1 class="display-4">尚无任何报告</h1>
+  <p class="lead">apk checker 支持上传apk、aab文件，自动检查包大小并生成报告展示，对历史报表展示包大小的轨迹曲线。</p>
+  <hr class="my-4">
+  <p>还没有任何的报告，马上点击上传apk、aab文件创建第一份报告吧</p>
+  <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModal">上传APK</button>
+
+  </div>
+
+
+ <script>
+$('#upload').click(function() {
+    var upload_path = $('#upload_path').text();
+    var formData = new FormData($('#upload-form')[0]);
+    formData.append("upload_path", upload_path);
+    window.alert("文件后台上传中,请稍后");
+    $.post({
+        url: '/upload',
+        dataType: 'json',
+        type: 'POST',
+        data: formData,
+        async: true,
+        cashe: false,
+        contentType: false,
+        processData: false,
+        success: function(returndata) {
+            if (returndata['code'] == 200) {
+                var info = returndata['info'];
+                alert(info);
+                var report_path =returndata['report_info']['report_path'];
+                window.location.href = report_path;
+            }
+        },
+        error: function(returndata) {
+            alert("报告生成失败！")
+        }
+    })
+});
+        </script>
+ </body>
+</html>

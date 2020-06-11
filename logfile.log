@@ -1,0 +1,14 @@
+[I 200612 01:33:54 filetools:62] 创建/Users/linpengcheng/Desktop/ApkChecker_new/Report完成!
+[I 200612 01:34:06 filetools:62] 创建/Users/linpengcheng/Desktop/ApkChecker_new/upload完成!
+[I 200612 01:34:06 server:93] 上传APKPure_v3.17.10_apkpure.com.apk
+[I 200612 01:34:06 filetools:49] 删除/Users/linpengcheng/Desktop/ApkChecker_new/check.json完成!
+[I 200612 01:34:06 filetools:39] 写/Users/linpengcheng/Desktop/ApkChecker_new/check.json文件完成
+[I 200612 01:34:06 checkapp:57] 开始matrix检查app
+[I 200612 01:34:06 checkapp:59] java -jar /Users/linpengcheng/Desktop/ApkChecker_new/matrix-apk-canary-0.6.5.jar --config /Users/linpengcheng/Desktop/ApkChecker_new/check.json
+[I 200612 01:34:28 checkapp:61] 检查app完成!
+[I 200612 01:34:28 report:32] 报告路径 /Users/linpengcheng/Desktop/ApkChecker_new/Report/com.apkpure.aegon/reports/report_20200612013428.html
+[I 200612 01:34:28 report:94] 生成报告：/Users/linpengcheng/Desktop/ApkChecker_new/Report/com.apkpure.aegon/reports/report_20200612013428.html
+[I 200612 01:34:28 report:111] 报告生成完成
+[I 200612 01:34:28 filetools:49] 删除/Users/linpengcheng/Desktop/ApkChecker_new/Report/com.apkpure.aegon/rs.json完成!
+[I 200612 01:34:28 filetools:39] 写/Users/linpengcheng/Desktop/ApkChecker_new/Report/com.apkpure.aegon/rs.json文件完成
+[I 200612 01:34:28 filetools:49] 删除/Users/linpengcheng/Desktop/ApkChecker_new/upload/APKPure_v3.17.10_apkpure.com.apk完成!

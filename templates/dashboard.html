@@ -1,0 +1,205 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <title>APK Checker</title>
+    <link rel="icon" href="{{ url_for('static',filename='/favicon.ico')}}">
+    <link href="{{ url_for('static',filename ='css/dashboard.css')}}" rel="stylesheet">
+    <link href="{{ url_for('static',filename='css/bootstrap.min.css') }}" rel="stylesheet">
+        <script src="{{ url_for('static',filename='js/dashboard.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
+
+    <script src="https://code.highcharts.com.cn/highcharts/highcharts.js"></script>
+    <script src="https://code.highcharts.com.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+    <script src="https://code.highcharts.com.cn/highcharts/themes/grid-light.js"></script>
+
+
+  </head>
+ <body>
+  <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="\">APK Checker</a>
+    <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#exampleModal">上传APK</button>
+  </nav>
+  <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">上传apk文件</h5>
+          </div>
+          <div class="modal-body">
+              <form id="upload-form" enctype="multipart/form-data">
+                    <input id='file' class="btn btn-primary" name="upload_file" type="file">
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+            <button id='upload' type="button" class="btn btn-primary" data-dismiss="modal">上传</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!-- end Modal -->
+  <div class="container-fluid"  >
+    <div class="row">
+      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+          <ul class="nav flex-column">
+            <!--这里写for开头-->
+            <!--{% for p,v in context["folders"].items() -%}-->
+            <li class="nav-item">
+              <a class="nav-link active" href="{{p}}">
+                <span data-feather="home"></span>
+                {{v['appname']}}<span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <!--{% endfor -%}-->
+            <!--这里写for结束-->
+          </ul>
+        </div>
+      </nav>
+
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h3 class="h3">{{ context["appname"]}}包大小趋势</h3>
+        </div>
+
+<!--        <canvas class="my-4 w-100" id="container" width="900" height="380" style="min-width:400px;height:400px"></canvas>-->
+        <div id="container" style="min-width:400px;height:400px"></div>
+        <div class="table-responsive">
+          <table class="table table-striped table-sm table-bordered">
+            <thead class="table-dark">
+              <tr>
+                <th>#</th>
+                <th>创建时间</th>
+                <th>APP版本</th>
+                <th>versioncode</th>
+                <th>包体大小</th>
+                <th>详情</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!--这里写for开头-->
+              <!--{% for url in context["urls"] -%}-->
+              <tr>
+                  <td>{{ loop.index + pagination.skip }}</td>
+                  <td class="text-left">{{ url['create_time'] }}</td>
+                  <td class="text-left">{{ url['versionName'] }}</td>
+                  <td class="text-left">{{ url['versionCode'] }}</td>
+                  <td class="text-left">{{ url['apksize'] }}</td>
+                  <td><a href="{{ url['report_path'] }}"><span style="color: #0077FF;">查看详情</span></a></td>
+              </tr>
+              <!--{% endfor -%}-->
+              <!--这里写for结束-->
+            </tbody>
+          </table>
+        </div>
+        {{ pagination.links }}
+      </main>
+    </div>
+  </div>
+ <script>
+     chart = Highcharts.chart('container', {
+	chart: {
+		zoomType: 'x'
+	},
+	title: {
+		text: 'APK大小趋势'
+	},
+	subtitle: {
+		text: document.ontouchstart === undefined ?
+		'鼠标拖动可以进行缩放' : '手势操作进行缩放'
+	},
+	xAxis: {
+		labels: {
+			rotation: -45
+		},
+		categories: {{context["time_list"]|tojson}}
+
+	},
+	yAxis: {
+		title: {
+			text: '文件大小/M'
+		},
+		labels: {
+			format: '{value} M'
+		}
+	},
+	tooltip: {
+		headerFormat: 'time: {point.x}<br>',
+		pointFormat: 'file size：{point.y} M ',
+		shared: true
+	},
+	legend: {
+		enabled: false
+	},
+	plotOptions: {
+		area: {
+			fillColor: {
+				linearGradient: {
+					x1: 0,
+					y1: 0,
+					x2: 0,
+					y2: 1
+				},
+				stops: [
+					[0, new Highcharts.getOptions().colors[0]],
+					[1, new Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+				]
+			},
+			marker: {
+				radius: 2
+			},
+			lineWidth: 1,
+			states: {
+				hover: {
+					lineWidth: 1
+				}
+			},
+			threshold: null
+		}
+	},
+	series: [{
+		type: 'area',
+		name: 'file size',
+		data: {{context["size_list"]|tojson}}
+
+	}]
+});
+
+$('#upload').click(function() {
+    var upload_path = $('#upload_path').text();
+    var formData = new FormData($('#upload-form')[0]);
+    formData.append("upload_path", upload_path);
+    window.alert("文件后台上传处理中,请稍后");
+    $.post({
+        url: '/upload',
+        dataType: 'json',
+        type: 'POST',
+        data: formData,
+        async: true,
+        cashe: false,
+        contentType: false,
+        processData: false,
+        success: function(returndata) {
+            if (returndata['code'] == 200) {
+                var info = returndata['info']
+                alert(info);
+                var report_path =returndata['report_info']['report_path'];
+                window.location.href = report_path;
+            }
+        },
+        error: function(returndata) {
+            alert("报告生成失败！")
+        }
+    })
+});
+        </script>
+ </body>
+</html>
